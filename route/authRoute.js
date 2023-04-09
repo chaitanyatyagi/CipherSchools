@@ -139,7 +139,7 @@ router.post("/forget-password", [
             }
             const token = Str.random(60)
             await User.updateOne({ email }, { resetTokenForPassword: token, resetTokenTime: Date.now() + 10 * 60 * 1000 })
-            await sendMail(email, `<p>Please reset your password at this link - <a href="http://127.0.0.1:3000/reset-password?token=${token}">Click</a></p>`, "Reset Your Password",)
+            await sendMail(email, `<p>Please reset your password at this link - <a href="https://cipher-school-frontend.vercel.app/reset-password?token=${token}">Click</a></p>`, "Reset Your Password",)
 
             return res.status(200).json(
                 {

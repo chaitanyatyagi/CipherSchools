@@ -50,7 +50,7 @@ exports.updateProfile = async (req, res, next) => {
                 message: msg
             })
         }
-        var { id, name, email, mobile } = req.body
+        const { id, name, email, mobile } = req.body
         var photo
         if (req.file) {
             photo = req.file.filename
@@ -62,13 +62,19 @@ exports.updateProfile = async (req, res, next) => {
             })
         }
 
-        const updatedUser = await User.findByIdAndUpdate({ _id: id }, {
-            $set: { name },
-            $set: { email },
-            $set: { mobile },
+        await User.findByIdAndUpdate({ _id: id }, {
             $set: { photo },
         })
-        console.log(req.file, photo, updatedUser.photo)
+        await User.findByIdAndUpdate({ _id: id }, {
+            $set: { name },
+        })
+        await User.findByIdAndUpdate({ _id: id }, {
+            $set: { email },
+        })
+        const updatedUser = await User.findByIdAndUpdate({ _id: id }, {
+            $set: { mobile },
+        })
+        console.log(updatedUser)
         return res.status(200).json({
             status: "success",
             message: "Details has been updated !",
