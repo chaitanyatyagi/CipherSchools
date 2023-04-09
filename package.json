@@ -1,0 +1,29 @@
+{
+  "name": "cipher-school",
+  "version": "1.0.0",
+  "description": "Assignment on fullstack",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "author": "Chaitanya Tyagi",
+  "license": "ISC",
+  "dependencies": {
+    "@supercharge/strings": "^2.0.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-validator": "^6.15.0",
+    "googleapis": "^114.0.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.3",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.1",
+    "nodemon": "^2.0.22",
+    "path": "^0.12.7",
+    "sharp": "^0.32.0",
+    "start": "^5.1.0"
+  }
+}
