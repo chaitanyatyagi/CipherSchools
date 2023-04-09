@@ -5,6 +5,7 @@ const User = require("../model/userModel")
 const { sendMail } = require("../utils/sendMaill")
 const { Str } = require('@supercharge/strings')
 const { body, validationResult } = require('express-validator');
+const bcrypt = require("bcryptjs")
 
 router.post("/register", [
     body('email').trim().isEmail().withMessage('Email must be valid email.').normalizeEmail().toLowerCase(),
@@ -25,6 +26,7 @@ router.post("/register", [
                 })
             }
             const { name, email, password, mobile } = req.body
+            const Pass = await bcrypt.hash(password, 12)
             const user = await User.findOne({ email })
 
             if (user && user.length != 0) {
@@ -35,7 +37,7 @@ router.post("/register", [
             }
 
             const newUser = await User.create({
-                email, password, name, mobile
+                email, password: Pass, name, mobile
             })
 
             return res.status(200).json({
@@ -84,7 +86,7 @@ router.post("/login", [
             }
 
             const passwordDb = user.password
-            if (password != passwordDb) {
+            if (! await bcrypt.compare(password, passwordDb)) {
                 return res.status(200).json({
                     status: "fault",
                     message: "Entered Password in wrong !"
@@ -182,7 +184,8 @@ router.post("/reset-password/:token", [
                 })
             }
 
-            await User.updateOne({ resetTokenForPassword: token }, { $set: { resetTokenForPassword: null, resetTokenTime: null, password: password } })
+            const Pass = await bcrypt.hash(password, 12)
+            await User.updateOne({ resetTokenForPassword: token }, { $set: { resetTokenForPassword: null, resetTokenTime: null, password: Pass } })
             return res.status(200).json({
                 status: "success",
                 message: "Your password has been reset !"

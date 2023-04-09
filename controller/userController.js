@@ -3,6 +3,7 @@ const sharp = require('sharp')
 const User = require("../model/userModel")
 const { body, validationResult } = require('express-validator');
 const Follower = require("../model/followersModel")
+const bcrypt = require("bcryptjs")
 
 const multerStorage = multer.memoryStorage()
 
@@ -87,7 +88,7 @@ exports.passwordChange = async (req, res, next) => {
     try {
         const { _id, password, newpassword, changepassword } = req.body
         const user = await User.findById({ _id: _id })
-        if (user.password != password) {
+        if (! await bcrypt.compare(password, user.password)) {
             return res.status(200).json({
                 status: "fault",
                 message: "Please enter correct current password."
@@ -104,8 +105,9 @@ exports.passwordChange = async (req, res, next) => {
                 message: msg
             })
         }
+        const Pass = await bcrypt.hash(newpassword, 12)
         const updatedUser = await User.findByIdAndUpdate(_id, {
-            $set: { password: newpassword }
+            $set: { password: Pass }
         })
         return res.status(200).json({
             status: "success",
